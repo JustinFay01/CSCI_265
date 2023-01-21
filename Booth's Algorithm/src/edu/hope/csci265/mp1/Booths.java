@@ -1,4 +1,6 @@
-public class Booths extends Stallings {
+package edu.hope.csci265.mp1;
+
+public class Booths extends Stallings{
 
     public Booths(int numberOfBits) {
         super(numberOfBits);

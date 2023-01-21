@@ -8,6 +8,8 @@
 //  It is done completely in binary, without arithmetic operators (except 
 //  "n+1" and "n-1").
 
+package edu.hope.csci265.mp1;
+
 import java.util.Scanner;
 
 public class Stallings {
