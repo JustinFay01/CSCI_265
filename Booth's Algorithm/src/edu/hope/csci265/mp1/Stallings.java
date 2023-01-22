@@ -32,7 +32,7 @@ public class Stallings {
         }
     }
     
-    private void display(int C, int A, int Q, int M) {
+    protected void display(int C, int A, int Q, int M) {
         printBits(C, 1);
         System.out.print("  ");
         printBits(A, n);
@@ -83,7 +83,7 @@ public class Stallings {
             A = (byte)((A >> 1) | (C << (n-1)));
             C = 0;
             count -= 1;
-        } while (count != 0);
+        } while (count != 0);   
         
         // The result is AQ --> n*2 bits wide
         return ((A << n) | Q);
