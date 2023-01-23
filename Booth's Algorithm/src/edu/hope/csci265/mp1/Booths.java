@@ -62,15 +62,15 @@ public class Booths extends Stallings {
     }
 
     public static void main(String[] args) {
-        Scanner scan = new Scanner(System.in);
-        System.out.println("Booths Algorithm Test\n");
-        Booths b = new Booths(4);
+        // Scanner scan = new Scanner(System.in);
+        // System.out.println("Booths Algorithm Test\n");
+        // Booths b = new Booths(4);
 
-        System.out.println("Enter two integer numbers");
-        int n1 = scan.nextInt();
-        int n2 = scan.nextInt();
-        int result = b.multiply((byte) n1, (byte) n2);
-        System.out.println("\n\nResult : " + n1 + " * " + n2 + " = " + result);
-        scan.close();
+        // System.out.println("Enter two integer numbers");
+        // int n1 = scan.nextInt();
+        // int n2 = scan.nextInt();
+        // int result = b.multiply((byte) n1, (byte) n2);
+        // System.out.println("\n\nResult : " + n1 + " * " + n2 + " = " + result);
+        // scan.close();
     }
 }
