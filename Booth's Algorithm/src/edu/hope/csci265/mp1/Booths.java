@@ -13,15 +13,15 @@ public class Booths extends Stallings {
     public int multiply(byte multiplicand, byte multiplier) {
         // Start
         byte A = 0;
-        byte M = (byte) (multiplicand & (twoToThe(n) - 1)); // to trim the number to n bits (Multiplicand)
-        byte Q = (byte) (multiplier & (twoToThe(n) - 1)); // to trim the number to n bits (Multipler)
+        byte M = (byte) (multiplicand); // to trim the number to n bits (Multiplicand)
+        byte Q = (byte) (multiplier); // to trim the number to n bits (Multipler)
         byte count = n;// Number of Bits
 
         // Display the first line
         display(0, A, Q, M);
         System.out.println("    Initial values\n");
         byte previousQ0 = 0; // Starting Q0
-        byte Q0 = rightbit(Q);
+        byte Q0 = (byte) (rightbit(Q));
         do {
 
             if (Q0 == 0 && previousQ0 == 1) {
@@ -29,26 +29,28 @@ public class Booths extends Stallings {
                 A = (byte) (A + M);
 
                 display(leftbit(A, n), A, Q, M);
-                System.out.print(" Post Addition");
+                System.out.print("     Post Addition");
                 System.out.println();
             } else if (Q0 == 1 && previousQ0 == 0) {
                 A = (byte) (A - M);
 
                 display(leftbit(A, n), A, Q, M);
-                System.out.print(" Post Subtraction");
+                System.out.print("     Post Subtraction");
                 System.out.println();
             }
 
             
             // right shift & count--
-            previousQ0 = rightbit(Q); // Storing Last bit for next check
+            previousQ0 = (byte) (rightbit(Q)); // Storing Last bit for next check
             Q = (byte) ((Q >> 1) | (rightbit(A) << (n - 1))); // Shifting Multiplier and or'ing it with the lsb of A
             // Right Shifting A
+            
             A = (byte) (A >> 1);
+
             Q0 = rightbit(Q); // new lsb
 
-            display(leftbit(A, n), A, Q, M);
-            System.out.print(" Post Shift");
+            display(leftbit(A, n), A, Q, previousQ0);
+            System.out.print(" "+ previousQ0 + "   Post Shift");
             System.out.println();
             System.out.println();
             count--;
