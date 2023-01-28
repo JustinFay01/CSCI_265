@@ -8,31 +8,31 @@ public class Booths extends Stallings {
         super(numberOfBits);
     }
 
-
     @Override
     public int multiply(byte multiplicand, byte multiplier) {
         // Start
         byte A = 0;
-        byte M = (byte) (multiplicand); // to trim the number to n bits (Multiplicand)
-        byte Q = (byte) (multiplier); // to trim the number to n bits (Multipler)
+        byte M = (byte)(multiplicand & (twoToThe(n)-1)); // to trim the number to n bits (Multiplicand)
+        byte Q = (byte)(multiplier & (twoToThe(n)-1)); // to trim the number to n bits (Multipler)
         byte count = n;// Number of Bits
 
         // Display the first line
         display(0, A, Q, M);
         System.out.println("    Initial values\n");
-        byte previousQ0 = 0; // Starting Q0
-        byte Q0 = (byte) (rightbit(Q));
+        int previousQ0 = 0; // Starting Q0
+        //byte Q0 = (byte) (rightbit(Q));
         do {
-
+            int Q0 = rightbit(Q); // new lsb
             if (Q0 == 0 && previousQ0 == 1) {
                 // add M
-                A = (byte) (A + M);
+                A = (byte)((A + M) & (twoToThe(n) - 1));
 
                 display(leftbit(A, n), A, Q, M);
                 System.out.print("     Post Addition");
                 System.out.println();
             } else if (Q0 == 1 && previousQ0 == 0) {
-                A = (byte) (A - M);
+                // subtract m
+                A = (byte)((A - M) & (twoToThe(n) - 1));
 
                 display(leftbit(A, n), A, Q, M);
                 System.out.print("     Post Subtraction");
@@ -41,15 +41,13 @@ public class Booths extends Stallings {
 
             
             // right shift & count--
-            previousQ0 = (byte) (rightbit(Q)); // Storing Last bit for next check
-            Q = (byte) ((Q >> 1) | (rightbit(A) << (n - 1))); // Shifting Multiplier and or'ing it with the lsb of A
+            previousQ0 = Q0; // Storing Last bit for next check
+            Q = (byte) (((Q >> 1) | (rightbit(A) << (n - 1))) & (twoToThe(n)-1)); // Shifting Multiplier and or'ing it with the lsb of A
             // Right Shifting A
-            
-            A = (byte) (A >> 1);
-
-            Q0 = rightbit(Q); // new lsb
-
-            display(leftbit(A, n), A, Q, previousQ0);
+            A = (byte)(((A >> 1) | (leftbit(A, (byte)n) << (n-1))) & (twoToThe(n) - 1));
+ 
+           
+            display(leftbit(A, n), A, Q, M);
             System.out.print(" "+ previousQ0 + "   Post Shift");
             System.out.println();
             System.out.println();
@@ -62,15 +60,15 @@ public class Booths extends Stallings {
     }
 
     public static void main(String[] args) {
-        // Scanner scan = new Scanner(System.in);
-        // System.out.println("Booths Algorithm Test\n");
-        // Booths b = new Booths(4);
+        Scanner scan = new Scanner(System.in);
+        System.out.println("Booths Algorithm Test\n");
+        Booths b = new Booths(4);
 
-        // System.out.println("Enter two integer numbers");
-        // int n1 = scan.nextInt();
-        // int n2 = scan.nextInt();
-        // int result = b.multiply((byte) n1, (byte) n2);
-        // System.out.println("\n\nResult : " + n1 + " * " + n2 + " = " + result);
-        // scan.close();
+        System.out.println("Enter two integer numbers");
+        int n1 = scan.nextInt();
+        int n2 = scan.nextInt();
+        int result = b.multiply((byte) n1, (byte) n2);
+        System.out.println("\n\nResult : " + n1 + " * " + n2 + " = " + result);
+        scan.close();
     }
 }
