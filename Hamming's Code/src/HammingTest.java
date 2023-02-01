@@ -39,8 +39,9 @@ public class HammingTest {
 	public void testEncode1() {
 		byte[] bits1 = hammy.encode('A', ODDPARITY);
 		byte[] bits2 = hammy.encode('A', EVENPARITY);
-		assert(equal(bits1, "11110000001"));
+		assert(equal(bits1, "11110000001" )); //backwards
 		assert(equal(bits2, "00100001001"));
+		
 	}
 	
 	@Test
