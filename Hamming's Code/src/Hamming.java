@@ -54,7 +54,6 @@ public class Hamming {
             }
         }
 
-        System.out.println(Arrays.toString(array));
         if(parity){
             String flip = Integer.toBinaryString(result);
             if(flip.length() < 4){
@@ -68,8 +67,6 @@ public class Hamming {
                 }
                 else flipped += 0;
             }
-
-            System.out.println(flipped);
             result = Integer.parseInt(flipped, 2);
         }
         if(result != 0) { //Error!
