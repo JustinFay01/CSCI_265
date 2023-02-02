@@ -61,7 +61,6 @@ public class Hamming {
                flip = "0" + flip;
             }
             String flipped = "";
-            System.out.println(flip);
             for(int i = 0; i < flip.length(); i++){
                 if(flip.charAt(i) == '0'){
                     flipped += 1;
