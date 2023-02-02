@@ -17,7 +17,7 @@ public class Hamming {
         hamCode[6] = (byte) ((val >> 3) & 1);
         hamCode[8] = (byte) ((val >> 2) & 1);
         hamCode[9] = (byte) ((val >> 1) & 1);
-        hamCode[10] = (byte) (val & 1);
+        //hamCode[10] = (byte) (val & 1);
 
         // find parity
         int par = 0;
@@ -75,7 +75,7 @@ public class Hamming {
         //Decode
         String binary = "";
         for(int i = 2; i < array.length; i++){
-           if(i != 3 && i != 7){
+           if((i + 1 & i) != 0){
                 binary += array[i];
            }
         }
