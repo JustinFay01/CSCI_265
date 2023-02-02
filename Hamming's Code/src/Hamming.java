@@ -1,3 +1,5 @@
+import javax.swing.Painter;
+
 public class Hamming {
 
     // This method accepts a character and an indication of parity (odd parity is
@@ -6,45 +8,40 @@ public class Hamming {
     public byte[] encode(char val, boolean parity) {
         byte[] hamCode = new byte[11];
 
-        // Set pairty bits for even
-        hamCode = setEventPairty(val, hamCode);
-        if (parity){
+        // Original Numbers
+        hamCode[2] = (byte) ((val >> 6) & 1);
+        hamCode[4] = (byte) ((val >> 5) & 1);
+        hamCode[5] = (byte) ((val >> 4) & 1);
+        hamCode[6] = (byte) ((val >> 3) & 1);
+        hamCode[8] = (byte) ((val >> 2) & 1);
+        hamCode[9] = (byte) ((val >> 1) & 1);
+        hamCode[10] = (byte) (val & 1);
+
+        // find parity
+        int par = 0;
+        for (int i = 0; i < hamCode.length; i++) {
+            if (hamCode[i] == 1) {
+                par ^= i + 1;
+            }
+        }
+
+        // set parity
+        hamCode[0] = (byte) (par & 1);
+        hamCode[1] = (byte) (par >> 1 & 1);
+        hamCode[3] = (byte) (par >> 2 & 1);
+        hamCode[7] = (byte) (par >> 3 & 1);
+
+        if (parity) {
             hamCode[0] = (byte) (hamCode[0] ^ 1);
             hamCode[1] = (byte) (hamCode[1] ^ 1);
             hamCode[3] = (byte) (hamCode[3] ^ 1);
             hamCode[7] = (byte) (hamCode[7] ^ 1);
         }
 
-        //Input rest of number
-        hamCode[2] = (byte) ((val >> 6) & 1);
-        hamCode[4] = (byte) ((val >> 5) & 1); 
-        hamCode[5] = (byte) ((val >> 4) & 1);
-        hamCode[6] = (byte) ((val >> 3) & 1); 
-        hamCode[8] = (byte) ((val >> 2) & 1);
-        hamCode[9] = (byte) ((val >> 1) & 1); 
-        hamCode[10] = (byte) (val & 1); 
-        
-
+        System.out.println((byte) par);
 
         printBits(hamCode);
         System.out.println();
-
-        return hamCode;
-    }
-
-    public byte[] setEventPairty(char val, byte[] hamCode) {
-        /*
-         * Char Shifts Binary from left to right 
-         */ 
-                            //11               //9             //7             //5
-        hamCode[0] = (byte) ((val >> 6 & 1) ^ (val >> 4 & 1) ^ (val >> 1 & 1) ^ (val & 1));
-                             //11                   //10            //6 
-        hamCode[1] = (byte) ((val >> 6 & 1) ^ (val >> 5 & 1) ^ (val >> 2 & 1)); // 11, 10, 6
-                             //7               // 6            //5
-        hamCode[3] = (byte) ((val >> 3 & 1) ^ (val >> 2 & 1) ^ (val >> 1 & 1)); // 7, 6, 5
-                            //11             //10            //9
-        hamCode[7] = (byte) ((val >> 6 & 1) ^ (val >> 5 & 1) ^ (val >> 4 & 1)); // 11, 10, 9
-        
         return hamCode;
     }
 
@@ -72,10 +69,10 @@ public class Hamming {
         byte[] M = ham.encode('M', EVENPARITY);
 
         // Test #1: 'A' should be 00100001001 in even parity
-        // byte[] A = ham.encode('A', EVENPARITY);
-        // System.out.print("'A' in even parity is ");
-        // ham.printBits(A);
-        // System.out.println();
+        byte[] A = ham.encode('A', EVENPARITY);
+        System.out.print("'A' in even parity is ");
+        ham.printBits(A);
+        System.out.println();
 
         // Test #2: I should get the character back!
         // char AA = ham.decode(A, EVENPARITY);
