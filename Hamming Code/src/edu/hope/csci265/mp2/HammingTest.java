@@ -1,3 +1,4 @@
+package edu.hope.csci265.mp2;
 //------------------------------------------------------------------------
 //
 // JUnit for testing Machine Problem 2 on Hamming Code
