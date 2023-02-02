@@ -1,4 +1,5 @@
-import javax.swing.Painter;
+import java.util.Arrays;
+
 
 public class Hamming {
 
@@ -38,10 +39,6 @@ public class Hamming {
             hamCode[7] = (byte) (hamCode[7] ^ 1);
         }
 
-        System.out.println((byte) par);
-
-        printBits(hamCode);
-        System.out.println();
         return hamCode;
     }
 
@@ -50,9 +47,43 @@ public class Hamming {
     // returns. This method should handle a 1-bit flip error by finding the error,
     // correcting it, and returning the original character.
     public char decode(byte[] array, boolean parity) {
-        // Outer loop for parity bits inner loop
+        int result = 0;
+        for(int i = 0; i < array.length; i++){
+            if(array[i] == 1){
+                result ^= i + 1;
+            }
+        }
 
-        return 'A';
+        System.out.println(Arrays.toString(array));
+        if(parity){
+            String flip = Integer.toBinaryString(result);
+            if(flip.length() < 4){
+               flip = "0" + flip;
+            }
+            String flipped = "";
+            System.out.println(flip);
+            for(int i = 0; i < flip.length(); i++){
+                if(flip.charAt(i) == '0'){
+                    flipped += 1;
+                }
+                else flipped += 0;
+            }
+
+            System.out.println(flipped);
+            result = Integer.parseInt(flipped, 2);
+        }
+        if(result != 0) { //Error!
+            array[result - 1] = (byte) (array[result - 1] ^ 1); //Fixed!
+        } 
+        //Decode
+        String binary = "";
+        for(int i = 2; i < array.length; i++){
+           if(i != 3 && i != 7){
+                binary += array[i];
+           }
+        }
+
+        return (char) Integer.parseInt(binary, 2);
     }
 
     public void printBits(byte[] bits) {
@@ -66,8 +97,6 @@ public class Hamming {
 
         Hamming ham = new Hamming();
 
-        byte[] M = ham.encode('M', EVENPARITY);
-
         // Test #1: 'A' should be 00100001001 in even parity
         byte[] A = ham.encode('A', EVENPARITY);
         System.out.print("'A' in even parity is ");
@@ -75,12 +104,12 @@ public class Hamming {
         System.out.println();
 
         // Test #2: I should get the character back!
-        // char AA = ham.decode(A, EVENPARITY);
-        // System.out.println("We should get A back: " + AA);
+        char AA = ham.decode(A, EVENPARITY);
+        System.out.println("We should get A back: " + AA);
 
-        // // Test #3: Flipping 1 bit should not matter
-        // A[5] = (byte) (A[5] ^ 1);
-        // AA = ham.decode(A, EVENPARITY);
-        // System.out.println("We should get A back: " + AA);
+        // Test #3: Flipping 1 bit should not matter
+        A[5] = (byte) (A[5] ^ 1);
+        AA = ham.decode(A, EVENPARITY);
+        System.out.println("We should get A back: " + AA);
     }
 }
