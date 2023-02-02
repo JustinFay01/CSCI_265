@@ -10,35 +10,25 @@ public class Hamming {
     public byte[] encode(char val, boolean parity) {
         byte[] hamCode = new byte[11];
 
-        // Original Numbers
-        hamCode[2] = (byte) ((val >> 6) & 1);
-        hamCode[4] = (byte) ((val >> 5) & 1);
-        hamCode[5] = (byte) ((val >> 4) & 1);
-        hamCode[6] = (byte) ((val >> 3) & 1);
-        hamCode[8] = (byte) ((val >> 2) & 1);
-        hamCode[9] = (byte) ((val >> 1) & 1);
-        //hamCode[10] = (byte) (val & 1);
+        //Load original numbers
+        int shift = 6;
+        for(int i = 0; i < hamCode.length; i++) 
+            if((i + 1 & i) != 0) hamCode[i] = (byte) ((val >> shift--) & 1);
+
 
         // find parity
         int par = 0;
-        for (int i = 0; i < hamCode.length; i++) {
-            if (hamCode[i] == 1) {
-                par ^= i + 1;
-            }
-        }
+        for (int i = 0; i < hamCode.length; i++) 
+            if (hamCode[i] == 1)par ^= i + 1;
+        
 
-        // set parity
-        hamCode[0] = (byte) (par & 1);
-        hamCode[1] = (byte) (par >> 1 & 1);
-        hamCode[3] = (byte) (par >> 2 & 1);
-        hamCode[7] = (byte) (par >> 3 & 1);
-
-        if (parity) {
-            hamCode[0] = (byte) (hamCode[0] ^ 1);
-            hamCode[1] = (byte) (hamCode[1] ^ 1);
-            hamCode[3] = (byte) (hamCode[3] ^ 1);
-            hamCode[7] = (byte) (hamCode[7] ^ 1);
+        //set pairty
+        shift = 0;
+        for(int i = 0; i < hamCode.length; i = i * 2 + 1){
+            if(parity) hamCode[i] = hamCode[i] = (byte) ((par >> shift++ & 1)^ 1); //if odd or with 1
+            else hamCode[i] = (byte) (par >> shift++ & 1); //if even just shift normally
         }
+        
 
         return hamCode;
     }
