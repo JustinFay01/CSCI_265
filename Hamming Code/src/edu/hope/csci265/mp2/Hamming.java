@@ -1,6 +1,6 @@
 package edu.hope.csci265.mp2;
-import java.util.Arrays;
 
+import java.util.Arrays;
 
 public class Hamming {
 
@@ -10,25 +10,30 @@ public class Hamming {
     public byte[] encode(char val, boolean parity) {
         byte[] hamCode = new byte[11];
 
-        //Load original numbers
-        int shift = 6;
-        for(int i = 0; i < hamCode.length; i++) 
-            if((i + 1 & i) != 0) hamCode[i] = (byte) ((val >> shift--) & 1);
-
+        // Load original numbers
+        int shift = 6; // 1 less than the character we are encoding
+        for (int i = 0; i < hamCode.length; i++)
+            if ((i + 1 & i) != 0)
+                hamCode[i] = (byte) ((val >> shift--) & 1);
 
         // find parity
         int par = 0;
-        for (int i = 0; i < hamCode.length; i++) 
-            if (hamCode[i] == 1)par ^= i + 1;
-        
+        // we can find the pairty by bitwise or'ing each of the indices an on bit
+        // (denoted by one) is found.
+        // When even this sets the running total of 1's to 0 (and if odd sets it to 1111)
+        // This will give the index a bit has been flipped if there is an error
+        for (int i = 0; i < hamCode.length; i++)
+            if (hamCode[i] == 1)
+                par ^= i + 1;
 
-        //set pairty
+        // set pairty
         shift = 0;
-        for(int i = 0; i < hamCode.length; i = i * 2 + 1){
-            if(parity) hamCode[i] = hamCode[i] = (byte) ((par >> shift++ & 1)^ 1); //if odd or with 1
-            else hamCode[i] = (byte) (par >> shift++ & 1); //if even just shift normally
+        for (int i = 0; i < hamCode.length; i = i * 2 + 1) {// i will equal 1 less than powers of 2 after 1
+            if (parity)
+                hamCode[i] = hamCode[i] = (byte) ((par >> shift++ & 1) ^ 1); // if odd or with 1
+            else
+                hamCode[i] = (byte) (par >> shift++ & 1); // if even just shift normally
         }
-        
 
         return hamCode;
     }
@@ -39,37 +44,39 @@ public class Hamming {
     // correcting it, and returning the original character.
     public char decode(byte[] array, boolean parity) {
         int result = 0;
-        for(int i = 0; i < array.length; i++){
-            if(array[i] == 1){
+        for (int i = 0; i < array.length; i++) {
+            if (array[i] == 1) {
                 result ^= i + 1;
             }
         }
-
-        if(parity){
+        //If the pairty is odd we must flip the bits
+        if (parity) {
             String flip = Integer.toBinaryString(result);
-            if(flip.length() < 4){
-               flip = "0" + flip;
+            //if the orignal number (before flip) is denoted by fewer than four bits 
+            //We must add a bit so we can flip it to the correct number
+            if (flip.length() < 4) {
+                flip = "0" + flip;
             }
             String flipped = "";
-            for(int i = 0; i < flip.length(); i++){
-                if(flip.charAt(i) == '0'){
+            for (int i = 0; i < flip.length(); i++) {
+                if (flip.charAt(i) == '0') {
                     flipped += 1;
-                }
-                else flipped += 0;
+                } else
+                    flipped += 0;
             }
             result = Integer.parseInt(flipped, 2);
         }
-        if(result != 0) { //Error!
-            array[result - 1] = (byte) (array[result - 1] ^ 1); //Fixed!
-        } 
-        //Decode
-        String binary = "";
-        for(int i = 2; i < array.length; i++){
-           if((i + 1 & i) != 0){
-                binary += array[i];
-           }
+        //Error found by oring the sums
+        if (result != 0) { // Error!
+            array[result - 1] = (byte) (array[result - 1] ^ 1); // Fixed!
         }
-
+        // Decode
+        String binary = "";
+        for (int i = 2; i < array.length; i++) 
+            if ((i + 1 & i) != 0) 
+                binary += array[i];
+            
+        
         return (char) Integer.parseInt(binary, 2);
     }
 
