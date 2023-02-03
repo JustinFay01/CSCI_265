@@ -18,9 +18,8 @@ public class Hamming {
 
         // find parity
         int par = 0;
-        // we can find the pairty by bitwise or'ing each of the indices an on bit
-        // (denoted by one) is found.
-        // When even this sets the running total of 1's to 0 (and if odd sets it to 1111)
+        // we can find the parity by bitwise or'ing each of the indices of an ON bit
+        // When even parity, this sets the running total of 1's to 0000 (and if odd sets it to 1111)
         // This will give the index a bit has been flipped if there is an error
         for (int i = 0; i < hamCode.length; i++)
             if (hamCode[i] == 1)
