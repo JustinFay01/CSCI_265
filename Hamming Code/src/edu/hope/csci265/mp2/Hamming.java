@@ -1,13 +1,11 @@
 package edu.hope.csci265.mp2;
 
-import java.util.Arrays;
-
 public class Hamming {
 
     // This method accepts a character and an indication of parity (odd parity is
     // true; even parity is false). Your method must return a byte array of bits
     // that make up the Hamming code representation of the character
-    public byte[] encode(char val, boolean parity) {
+    public byte[] encode(char val, boolean parity) {    
         byte[] hamCode = new byte[11];
 
         // Load original numbers
