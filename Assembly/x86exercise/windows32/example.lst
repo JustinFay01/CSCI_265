@@ -1,0 +1,69 @@
+Microsoft (R) Macro Assembler Version 14.35.32216.1	    03/30/23 12:26:17
+example.asm						     Page 1 - 1
+
+
+				.586                    ; Assembler Directive (Similar to Import Statement)
+				                        ; Labels include: Number, Sum, and MainProc
+
+				                        ; Compiler dosen't care about white space, 
+				                        ; Assembler expects Label Start at location 0 
+				.MODEL FLAT
+				 
+				.STACK  4096            ; reserve 4096-byte stack
+				 
+ 00000000			.DATA                   ; reserve storage for data, Tells assmbler what it is going to interpret
+ 00000000 FFFFFF97		number  DWORD   -105    ; Local Variable, "Variable name, Type, Value" 
+ 00000004 00000000		sum     DWORD   ?       ; Memory is allocated by first available
+				 
+ 00000000			.CODE                           ; start of main program code
+ 00000000			_MainProc    PROC
+ 00000000  A1 00000000 R	        mov     eax, number     ; Stack Instruction "Function, Destination, Source"
+ 00000005  05 0000009E		        add     eax, 158        
+ 0000000A  A3 00000004 R	        mov     sum, eax        
+				 
+ 0000000F  B8 00000000		        mov   eax, 0            
+ 00000014  C3			        ret
+ 00000015			_MainProc    ENDP
+				 
+				END                             ; end of source code
+Microsoft (R) Macro Assembler Version 14.35.32216.1	    03/30/23 12:26:17
+example.asm						     Symbols 2 - 1
+
+
+
+
+Segments and Groups:
+
+                N a m e                 Size     Length   Align   Combine Class
+
+FLAT . . . . . . . . . . . . . .	GROUP
+STACK  . . . . . . . . . . . . .	32 Bit	 00001000 Para	  Stack	  'STACK'	 
+_DATA  . . . . . . . . . . . . .	32 Bit	 00000008 Para	  Public  'DATA'	
+_TEXT  . . . . . . . . . . . . .	32 Bit	 00000015 Para	  Public  'CODE'	
+
+
+Procedures, parameters, and locals:
+
+                N a m e                 Type     Value    Attr
+
+_MainProc  . . . . . . . . . . .	P Near	 00000000 _TEXT	Length= 00000015 Public
+
+
+Symbols:
+
+                N a m e                 Type     Value    Attr
+
+@CodeSize  . . . . . . . . . . .	Number	 00000000h   
+@DataSize  . . . . . . . . . . .	Number	 00000000h   
+@Interface . . . . . . . . . . .	Number	 00000000h   
+@Model . . . . . . . . . . . . .	Number	 00000007h   
+@code  . . . . . . . . . . . . .	Text   	 _TEXT
+@data  . . . . . . . . . . . . .	Text   	 FLAT
+@fardata?  . . . . . . . . . . .	Text   	 FLAT
+@fardata . . . . . . . . . . . .	Text   	 FLAT
+@stack . . . . . . . . . . . . .	Text   	 FLAT
+number . . . . . . . . . . . . .	DWord	 00000000 _DATA	
+sum  . . . . . . . . . . . . . .	DWord	 00000004 _DATA	
+
+	   0 Warnings
+	   0 Errors
