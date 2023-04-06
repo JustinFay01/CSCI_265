@@ -1,0 +1,36 @@
+//----------------------------------------------------------------------
+//
+//  Find the endian format using Java
+//  taken from IBM DeveloperWorks Forum
+//
+//  Mike Jipping, November 2004
+
+import java.nio.*;
+
+public class byteorder {
+
+   ByteOrder bo; 
+   
+   public byteorder() {
+      
+      bo = ByteOrder.nativeOrder();
+      
+   }
+   
+   public void printByteOrder () {
+   
+      System.out.println( "This system is " + bo );
+      
+   }
+   
+   public static void main (String[] args) 
+   {
+      byteorder bo = new byteorder();
+      
+      bo.printByteOrder();
+      
+   }
+   
+}
+   
+   

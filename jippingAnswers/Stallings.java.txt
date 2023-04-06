@@ -1,0 +1,106 @@
+//-----------------------------------------------------------------------
+//
+//  Stallings algorithm for unsigned integer multiplication
+//
+//  Mike Jipping, December 2017
+//
+//  This code is "phrased" in the style of Stallings, expressed in his textbook.
+//  It is done completely in binary, without arithmetic operators (except 
+//  "n+1" and "n-1").
+
+package edu.hope.csci265.mp1;
+
+import java.util.Scanner;
+
+public class Stallings {
+    
+    // Number of bits.  Called "n" because that's what Stallings called it.
+    byte n;
+    
+    // The constructor sets the number of bits.
+    public Stallings(int numberOfBits) {
+        n = (byte) numberOfBits;
+    }
+    
+    // Some *essential* debugging bit-printing methods
+    protected void printBits(int quantity, int nBits) {
+        for (int i=nBits-1; i >= 0; i--) {
+            int bits = 1 << i;
+            int bit = bits & quantity;
+            bit = bit >> i;
+            System.out.print(bit);
+        }
+    }
+    
+    private void display(int C, int A, int Q, int M) {
+        printBits(C, 1);
+        System.out.print("  ");
+        printBits(A, n);
+        System.out.print("  ");
+        printBits(Q, n);
+        System.out.print("  ");
+        printBits(M, n);
+    }
+
+    // Convenience functions.
+    // Compute 2^n
+    public byte twoToThe(byte n) {
+        return (byte) Math.pow(2, n);
+    }
+    
+    // Returns the leftmost of "n" bits of "number".
+    public byte leftbit(byte number, byte n) {
+        return (byte)(number >> (n-1) & 0b1);
+    }
+    
+    // Returns the rightmost bit of "number".
+    public byte rightbit(byte number) {
+        return (byte)(number & 0b1);
+    }
+    
+    // The focus of this class.  This is integer multiplication as
+    // expressed by Stallings.
+    public int multiply(byte multiplicand, byte multiplier) {
+        byte C=0, A=0;
+        byte M = (byte)(multiplicand & (twoToThe(n)-1));  // to trim the number to n bits
+        byte Q = (byte)(multiplier & (twoToThe(n)-1));    // to trim the number to n bits
+        byte count = n;
+        
+        // Display the first line
+        display(C, A, Q, M);
+        System.out.println("    Initial values");
+        
+        do {
+            // Q0 = 1?
+            byte Q0 = rightbit(Q);
+            if (Q0 == 1) {
+                C = leftbit((byte)(A+M), (byte)(n+1));
+                A = (byte)((A + M) & (twoToThe(n)-1));
+            }
+            
+            // Shift right C, A, Q
+            Q = (byte)((Q >> 1) | (rightbit(A)<<(n-1)));
+            A = (byte)((A >> 1) | (C << (n-1)));
+            C = 0;
+            count -= 1;
+        } while (count != 0);
+        
+        // The result is AQ --> n*2 bits wide
+        return ((A << n) | Q);
+    }
+    
+    // Main code
+    public static void main (String[] args) 
+    {
+        Scanner scan = new Scanner(System.in);
+        System.out.println("Stallings Algorithm Test\n");
+        Stallings b = new Stallings(4);
+ 
+        System.out.println("Enter two integer numbers");
+        int n1 = scan.nextInt();
+        int n2 = scan.nextInt();
+        int result = b.multiply((byte)n1, (byte)n2);
+        System.out.println("\n\nResult : "+ n1 +" * "+ n2 +" = "+ result); 
+        scan.close();
+    }
+}
