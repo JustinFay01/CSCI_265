@@ -58,16 +58,59 @@ public class Booths extends Stallings {
 
     }
 
+    /**
+     * 
+     * @param result
+     * @param n
+     * @return
+     *         Switch number from unsigned intger to signed int using twos
+     *         complement
+     *         First by complimenting the result then ANDing with the number of bits
+     *         needed
+     *         to select the first n bits
+     */
+    public static int twosComplement(int result, int n) {
+        if (Math.pow(2, n) > Integer.MAX_VALUE)
+            throw new IllegalArgumentException();
+        int tmp = ((~(result)) & (int) Math.pow(2, 2 * n) - 1) + 1;
+        return tmp;
+    }
+
+    /**
+     * 
+     * @param result
+     * @param n
+     * @return
+     *         Used as a helper method to determine the end result is negative
+     *         It does so by taking the result and the number of bits used in the
+     *         multiplication process.
+     *         The result is then shifted 2 * n (number of bits) - 1 (to preserve
+     *         the sign bit) and then check if it is either 0 or 1
+     */
+    public static boolean checkSign(int result, int n) {
+        if (Math.pow(2, n) > Integer.MAX_VALUE)
+            throw new IllegalArgumentException();
+        return (((result >> 2 * n - 1) & 1) == 1) ? true : false;
+    }
+
     public static void main(String[] args) {
         Scanner scan = new Scanner(System.in);
         System.out.println("Booths Algorithm Test\n");
-        Booths b = new Booths(4);
+        int n = 5;
+        Booths b = new Booths(n);
 
         System.out.println("Enter two integer numbers");
         int n1 = scan.nextInt();
         int n2 = scan.nextInt();
         int result = b.multiply((byte) n1, (byte) n2);
-        System.out.println("\n\nResult : " + n1 + " * " + n2 + " = " + result);
+
+        String out = "";
+        if (checkSign(result, n)) {
+            out = "-" + String.valueOf(twosComplement(result, n));
+        } else
+            out = String.valueOf(result);
+
+        System.out.println("\n\nResult : " + n1 + " * " + n2 + " = " + out);
         scan.close();
     }
 }
